@@ -9,7 +9,7 @@
 <body>
     <div id="app">
         <h1>Todo App</h1>
-        <input type="text" v-model="inputText" v-on:keyup.enter="addItem"> <!-- enter키 눌렀을때 입력한 text추가-->
+        <input type="text" v-model="inputText" v-on:keyup.enter="addItem"> <!-- enter키 눌렀을때만 입력한 text추가-->
         <button v-on:click="fetchItems">add</button>
         <div>
             <!-- {{ todoItems }} 화면에 배열 바로 보여줌. -->
