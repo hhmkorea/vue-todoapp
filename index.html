@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue Todo</title>
+</head>
+<body>
+    <div id="app">
+        <h1>Todo App</h1>
+        <input type="text" v-model="inputText" v-on:keyup.enter="addItem"> <!-- enter키 눌렀을때만 입력한 text추가-->
+        <button v-on:click="fetchItems">add</button>
+        <div>
+            <!-- {{ todoItems }} 화면에 배열 바로 보여줌. -->
+            <ul>
+                <li v-for="(todoItem, index) in todoItems">  <!-- for문 -->
+                    {{ todoItem }}
+                    <button v-on:click="removeItem(todoItem, index)">remove</button>
+                </li>
+                <!-- 
+                <li>{{ todoItems[0] }}</li>
+                <li>{{ todoItems[1] }}</li>
+                <li>{{ todoItems[2] }}</li> 
+                -->
+            </ul>
+        </div>
+    </div>
+    
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+      new Vue({
+          created: function() { // init : instance 생성시 처음 실행
+            this.fetchItems();  // 화면뜰때 무조건 한번 나오게
+          },
+          methods: {
+            removeItem: function(todoItem, index) {
+                //axios.delete('todos/' + index);   //http 프로토콜 호출
+                console.log(todoItem, index);
+                this.todoItems.splice(index,1); // 배열에서 해당 인덱스 값 잘라내기
+                localStorage.removeItem(todoItem);
+            },
+            addItem: function(event) { // 입력한 input data 저장소에 저장하기.
+                console.log(event);
+                var value = this.inputText;
+                localStorage.setItem(value, value);
+                this.inputText = '';
+                this.todoItems.push(value); // 배열에 들어있는 값 추가
+            },
+            fetchItems: function() {  // todo data를 저장소에서 모두 꺼내오기.
+                //axios.get('/todos')
+                for(var i = 0; i < localStorage.length; i++) {
+                    var value = localStorage.key(i);
+                    console.log(value);
+                    //console.log(this);
+                    this.todoItems.push(value); // 배열에 데이타 넣음.
+                }
+            }              
+          },
+          el: '#app',
+          data: {
+              inputText: '',
+              todoItems: []
+          },
+      })
+  </script>
+</body>
+</html>
+
+<!--
+if (event.keyCode != 13) {
+    console.log(event);
+    var value = this.inputText;
+    localStorage.setItem(value, value);       // 입력한 Text 저장.
+    this.inputText = '';
+  }
+  /* 사용자가 입력한 Text 보내기
+    // ajax
+    $.ajax({
+        type: 'POST'
+    })
+    // vue
+    axios.post('주소', this.inputText); 
+  */
+-->
